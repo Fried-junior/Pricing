@@ -1,0 +1,911 @@
+---
+title: "Pricing"
+author: "Sabaye Fried-Junior"
+header-includes:
+- \usepackage{fancyhdr}
+- \usepackage{lipsum}
+- \pagestyle{fancy}
+- \fancyhead[CO,CE]{}
+- \fancyfoot[L,L]{Sabaye Fried-Junior}
+fontsize: 12pt
+lang: 'fr'
+geometry: a4paper,top=2cm,bottom=2cm,left=2cm,right=2cm
+output: 
+   pdf_document :
+       toc : yes 
+       number_section : yes
+       highlight: "tango"
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE,warning=FALSE,message=FALSE,fig.pos = "!h",sanitize=TRUE,fig.align='center',strip.white = TRUE)
+```
+
+\newpage
+
+
+
+# Hypothèses
+
+**H1** Lorsque le consommateur ne consomme pas de bien 1, son utilité (1) est égale $u(0,y)=hR$.
+
+
+**H2** La fonction $V(x)$ est C2, croissante et concave : $v'(x) \ge 0$ et $v''(x) < 0$.
+
+**H3** Sur ce marché les consommateurs se distinguent selon le paramètre $\theta (\theta > 0)$ qui mesure
+l’intensité des préférences du consommateur pour le bien 1. 
+
+Au reste les consommateurs sont supposés disposer du même revenu et le paramètre h (h > 0 utilité marginal de la monnaie) est commun à tous les individus. On suppose que la population des consommateurs est distribuée continûment sur le segment $\theta = [\underset{-}{\theta}, \bar{\theta}]$. Dans les calculs qui suivent, on
+suppose $\theta$ appartient à l'intervalle $[0,1]$. On notera $F(·)$ la fonction de répartition de $\theta$ et $f(·)$ la densité
+(qui est supposée exister et être strictement positive sur $\theta$).
+
+**H4** Dans cette économie simplifiée, la production du bien d'intérêt est assurée par un monopole. Le coût marginal de production est constant et égal à $c>0$
+
+
+&nbsp;
+
+# Contexte et problématique 
+
+&nbsp;
+
+Résolution du problème pour :
+\begin{center}
+ 
+$ u(x,y)=x(1+ln\theta-lnx) + hy$ \\
+et \\
+$\theta \sim  \mu(0,1)$
+\end{center}
+
+# Tarification linéaire : Vente à l'unité
+
+## Consommateur
+
+Le programme d'un consommateur de type $\theta$ est :
+$$  \cal{P}_{C-P}\left \{
+   \begin{array}{l l}
+      \underset{\{x,y\}}{Max} : u(x,y) =  x(1+ln\theta-lnx)+hy \\
+      slc : px+y\le R \\
+   \end{array}
+   \right .$$
+   
+On fixe le Revenu noté $\textbf{R}$ à 1200 et l'utilité marginale de la monnaie notée $\textbf{h}$ à 0.1.
+
+&nbsp;
+
+On décide de générer dix valeurs aléatoires de $\theta$ correspondant à dix consommateurs telles que :  $\theta \sim  \mu(0,1)$. On obtient le continuum de consommateurs suivant : 
+
+
+```{r}
+library(kableExtra)
+set.seed(23)
+unif<-runif(10,0,0.9)
+theta=sort(unif)
+theta<-rbind(round(theta,5))
+
+colnames(theta)<-c("1","2","3","4","5","6","7","8","9","10")
+rownames(theta)<-"theta"
+kable(theta,"latex",align = "c",caption = "Continuum de consommateurs") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F) 
+```
+
+Les caractéristiques individuelles correspondant à la demande et à l'utilité indirecte pour ces 10 individus sont résumées dans les tableaux suivants : 
+
+```{r,include=F}
+
+demande_individuel<-theta*(exp(-0.1))
+
+Demande<- c("0.181 * exp(p)" , "0.270 * exp(p)", "0.345 * exp(p)", "0.469 * exp(p)", "0.578 * exp(p)", "0.667 * exp(p)", "0.684 * exp(p)", "0.784 * exp(p)", "0.796 * exp(p)","0.812 * exp(p)")
+
+ind1<-rbind(theta,Demande)
+colnames(ind1)<-c("1","2","3","4","5","6","7","8","9","10")
+rownames(ind1)<-c("theta","Demande : x(p,R,theta)")
+
+kable(ind1[,c(1:5)],align = "c",caption = "Demandes individuelles des individus : 1 à 5") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F) 
+
+kable(ind1[,c(6:10)],align = "c",caption = "Demandes individuelles des individus : 6 à 10") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F)
+```
+
+
+```{r}
+Util_ind<-  c("x(p,R,theta) +120" , "x(p,R,theta) +120", "x(p,R,theta) +120", "x(p,R,theta) +120", "x(p,R,theta) +120", "x(p,R,theta) +120", "x(p,R,theta) +120", "x(p,R,theta) +120", "x(p,R,theta) +120","x(p,R,theta) +120")
+
+ind2<-rbind(theta,Demande,Util_ind)
+colnames(ind2)<-c("1","2","3","4","5","6","7","8","9","10")
+rownames(ind2)<-c("theta","Demande : x(p,R,theta)", "Utilité indirecte : V(p,R,theta)")
+
+kable(ind2[,c(1:5)],align = "c",caption = "Caractéristiques individuelles individus 1 à 5") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F) 
+
+kable(ind2[,c(6:10)],align = "c",caption = "Caractéristiques individuelles individus 6 à 10") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F)
+```
+
+## Monopole 
+
+Pour un consommateur de type $\theta$, le programme du monopole est: 
+$$  \cal{P}_{M-P}| \theta\left \{
+   \begin{array}{l l}
+      \underset{\{x,p\}}{Max}:  \pi_{\theta}(p,x) =  (p-c)x \\
+      slc : x=\theta exp(-hp) \\
+   \end{array}
+   \right .$$
+   
+Dans le respect des conditions de validité du modèle on fixe les différents niveaux de coût marginal tels que : 
+
+```{r}
+set.seed(23)
+c<-c(3,4,5,6,7,7.5,8,8.5,9,9.99)
+Cout<-rbind(c)
+
+colnames(Cout)<-c("1","2","3","4","5","6","7","8","9","10")
+rownames(Cout)<-"Valeur"
+kable(Cout,align = "c",caption = "Niveaux de coûts ") %>%
+kable_styling(latex_options=c("striped","hold_position"),full_width = F)
+
+
+```
+
+Le prix de vente unitaire étant donné par : $p=c+\frac{1}{h}$ ; pour les différents niveaux de coûts marginaux on a :
+
+```{r}
+p<-c+(1/0.1)
+P=rbind(Cout,p)
+
+colnames(P)<-c("1","2","3","4","5","6","7","8","9","10")
+rownames(P)<-c("Coût marginal","Prix de vente unitaire")
+
+kable(P,align = "c",caption = "Prix de vente en fonction du coût margianale ") %>%
+kable_styling(latex_options=c("striped","hold_position"),full_width = F)
+```
+
+```{r,fig.height=2.5}
+library(ggplot2)
+graph<-data.frame(cbind(c,p))
+ggplot(graph,aes(x=p,y=c))+geom_point()+geom_line()+xlab("Prix de vente unitaire")+ylab("Coût marginal")+theme_gray()
+```
+
+Le prix unitaire est croisssant avec l'augmentation du coût marginal, ce qui est logique.
+
+&nbsp; 
+
+\newpage
+
+$\textbf{Profit}$ : 
+
+Le monopole fait un profit à l'équilibre : $\pi(c+\frac{1}{h})=\frac{1}{2h}exp(-hc-1)$
+```{r}
+profit<-(1/(2*0.1))*exp(-0.1*c-1)
+p3<-round(profit,4)
+P=rbind(Cout,p,p3)
+
+colnames(P)<-c("1","2","3","4","5","6","7","8","9","10")
+rownames(P)<-c("Coût marginal","Prix de vente unitaire","Profit")
+
+kable(P,align = "c",caption = "Profit en fonction du coût marginal") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F)
+```
+
+```{r,fig.height=2.5}
+graph1<-data.frame(cbind(c,profit))
+ggplot(graph1,aes(x=profit,y=c))+geom_point()+geom_line()+xlab("Profit")+ylab("Coût marginal")+theme_gray()
+```
+
+En ce qui concerne la vente à l'unité, parmi les combinaisons coût marginal~prix : on constate que le profit est plus élévé lorsque le coût marginal est faible. 
+
+```{r}
+
+#sum(demande_individuel*14)-sum(demande_individuel*4)
+```
+
+&nbsp;
+
+$\textbf{Surplus du consommateur}$ : 
+
+Le surplus des consommateurs de type $\theta$ est donné par : $SC_{\theta}=\frac{\theta}{h}exp(-hc-1)$.
+
+Le surplus dépend du coût marginal. On construit donc une table qui renseigne sur les différents surplus de tous les individus en fonction des différents niveaux de coût marignal. 
+
+On a : 
+```{r}
+b1<-(theta[1]/0.1)*exp(-0.1*c-1)
+b2<-(theta[2]/0.1)*exp(-0.1*c-1)
+b3<-(theta[3]/0.1)*exp(-0.1*c-1)
+b4<-(theta[4]/0.1)*exp(-0.1*c-1)
+b5<-(theta[5]/0.1)*exp(-0.1*c-1)
+b6<-(theta[6]/0.1)*exp(-0.1*c-1)
+b7<-(theta[7]/0.1)*exp(-0.1*c-1)
+b8<-(theta[8]/0.1)*exp(-0.1*c-1)
+b9<-(theta[9]/0.1)*exp(-0.1*c-1)
+b10<-(theta[10]/0.1)*exp(-0.1*c-1)
+
+suruni<-cbind(b1,b2,b3,b4,b5,b6,b7,b8,b9,b10)
+
+rownames(suruni)<-c
+colnames(suruni)<-c("1","2","3","4","5","6","7","8","9","10")
+
+kable(round(suruni,4),align = "c",caption = "Surplus des consommateurs")%>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F)%>%
+  add_header_above(c("Coût marginal "=1,"Individus"=10)) 
+```
+
+Comme le montre la **Table 7**, pour chacun des individus, le surplus diminue avec l'augmentation du coût marginal. Ainsi, pour tous les individus de notre continuum de consommateurs, le surplus maximal est atteint au coût marginal minimum. 
+
+$\textbf{Rappel :}$
+```{r}
+kable(theta,"latex",align = "c",caption = "Continuum de consommateurs") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F) 
+```
+
+La **Table 7** s'interprète comme suit : les colonnes représentent le continuum de consommateurs et les lignes les différentes valeurs de notre continuum de coût marginal. 
+
+La colonne 1 représente l'individu 1. Ce dernier a un $\theta=0.20077$. Son surplus varie en fonction du coût marginal. Pour un coût marginal égal à 3, son surplus est égale à 0.5472. Pour un coût marginal égal à 4, son surplus est égal à 0.4951 et ainsi de suite.
+
+
+Pour aller plus loin, étant donné que le prix de vente dépend du coût marginal, on peut représenter le surplus du consommateur $\theta$ en fonction du prix de vente à l'unité. 
+
+
+```{r,fig.height=3}
+
+graphsurni<-data.frame(p,suruni)
+
+g3<-ggplot(graphsurni, aes(y=p))+ geom_point(aes(x = X1)) + 
+  geom_line(aes(x = X1)) + ylab("Prix de vente unitaire")+ xlab("Surplus")+
+  geom_line(aes(x = X2) )+ geom_point(aes(x = X2)) +
+  geom_line(aes(x = X3)) + geom_point(aes(x = X3)) +
+  geom_line(aes(x = X4) ) + geom_point(aes(x = X4)) +
+  geom_line(aes(x = X5) ) + geom_point(aes(x = X5)) +
+  geom_line(aes(x = X6) ) + geom_point(aes(x = X6)) +
+  geom_line(aes(x = X7) ) + geom_point(aes(x = X7)) +
+  geom_line(aes(x = X8) ) + geom_point(aes(x = X8)) +
+  geom_line(aes(x = X9) ) + geom_point(aes(x = X9)) +
+  geom_line(aes(x = X10)) + geom_point(aes(x = X10)) +ylim(13,21)+ggtitle("Surplus consommateurs en fonction du prix de Vente ")
+
+g3+ annotate(geom="text", y=21, x=0.75, label="Individus",
+              color="darkred") + annotate(geom="text", y=20.3, x=0.2720, label="1",
+              color="darkred",size=3) + annotate(geom="text", y=20.3, x=0.4047, label="2",
+              color="darkred",size=3) + annotate(geom="text", y=20.3, x=0.5166, label="3",
+              color="darkred",size=3) + annotate(geom="text", y=20.3, x=	0.7030, label="4",
+              color="darkred",size=3)+ annotate(geom="text", y=20.3, x=0.8665, label="5",
+              color="darkred",size=3)+ annotate(geom="text", y=19.8, x=	0.9591, label="6",
+              color="darkred",size=3)+ annotate(geom="text", y=20.3, x=1.0448, label="7",
+              color="darkred",size=3) + annotate(geom="text", y=19.3, x=1.1999, label="8",
+              color="darkred",size=3) + annotate(geom="text", y=20.5, x=	1.1926, label="9",
+              color="darkred",size=3)+ annotate(geom="text", y=19.8, x=1.3, label="10",
+              color="darkred",size=3)
+```
+
+
+
+# Tarification forfaitaire 
+
+## Consommateur 
+
+Si $x>0$ le programme du consommateur de type $\theta$ est :
+$$  \cal{P}_{C-A}\left \{
+   \begin{array}{l l}
+      \underset{\{x,y\}}{Max}:  u(x,y) =  x(1+ln\theta-lnx)+hy \\
+      slc : A+y\le R \\
+   \end{array}
+   \right .$$
+   
+   
+
+$\textbf{Rappel}$ :
+```{r}
+kable(theta,"latex",align = "c",caption = "Continuum de consommateurs") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F) 
+```
+
+La fonction de demande individuelle est donnée par : $x_{\theta}(A)=\theta$
+
+et la fonction d'utilité indirecte est : $$V_{\theta}(A,R)=(\theta-Ah)+hR$$
+
+## Monopole 
+
+
+
+```{r}
+set.seed(23)
+
+A=theta/0.1
+
+#theta
+#0.2007656 > ((0.1*c)+1)/2
+
+# on compare pas 
+
+#################################################@
+#parmi le continium
+
+```
+
+Soit A le montant du forfait, on a : $A= \frac{\bar{\theta}}{2h-h^2c}$
+
+```{r}
+Aop=1/((2*0.1)-((0.1^2)*c))
+
+Za<-rbind(c,round(Aop,3))
+rownames(Za)<-c("Coût marginal","Prix du Forfait")
+kable(Za,"latex",align = "c",caption = "Forfait") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F) 
+
+```
+
+&nbsp; 
+
+&nbsp; 
+
+Vérifions la condition de validité de A :  $Ah <\bar{\theta}$
+
+```{r}
+#condition 
+Aop*0.1<1
+```
+
+Vérifions la condition de c : $c< \frac{1}{h}$
+
+```{r}
+c<(1/0.1)
+```
+
+&nbsp;
+
+### Profit
+
+Le profit du monopole est : 
+$$\pi=\frac{\bar{\theta^2}}{2}(\frac{1}{h(2-hc)}-c)$$
+```{r}
+profit1=(0.5*( (1/(0.1*(2-0.1*c)))-c))
+
+prof<-round(rbind(Aop,profit1),4)
+colnames(prof)<-c("1","2","3","4","5","6","7","8","9","10")
+rownames(prof)<-c("Forfait","Profit")
+
+kable(prof,align = "c",caption = "Profit en fonction du forfait") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F)
+  
+
+```
+
+
+$\textbf{Qui consomme ?}$
+
+Tout consommateur de type $\theta$, avec $\theta \ge \frac{hc+\bar{\theta}}{2}$ consommera du bien A si $A \le R$, on a :
+
+```{r}
+#qui consomme ?
+t1<-theta[1]>1/(2-0.1*c)
+t2<-theta[2]>1/(2-0.1*c)
+t3<-theta[3]>1/(2-0.1*c)
+t4<-theta[4]>1/(2-0.1*c)
+t5<-theta[5]>1/(2-0.1*c)
+t6<-theta[6]>1/(2-0.1*c)
+t7<-theta[7]>1/(2-0.1*c)
+t8<-theta[8]>1/(2-0.1*c)
+t9<-theta[9]>1/(2-0.1*c)
+t10<-theta[10]>1/(2-0.1*c)
+
+cons<-rbind(t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)
+colnames(cons)<-c
+rownames(cons)<-round(theta,4)
+
+kable(cons,align = "c",caption = "Qui consomme ?") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F)%>%
+  add_header_above(c("theta"=1,"Niveau de coût marginal"=10))
+```
+
+
+Comme le montre la $\textbf{Table 12}$ seul les individus ayant un $\theta\ge0.6397$ consommeront du bien d'intérêt si la tarification forfaitaire est appliquée et ce pour certains niveaux de coût. En effet seuls les individus qui valorisent le plus le bien d'intéret seront intéressés par la formule à volonté. 
+
+Les individus ayant un $\theta=0.6397$ seront intéréssés par la formule à volonté si le coût marginal est inferieur à 4 et donc si le prix du forfait est inférieur à 6.25.
+
+Les individus ayant un $\theta\in[0.7375,0.7565]$ seront intéréssés par la formule à volonté si le coût marginal est inferieur à 6 et donc si le prix du forfait est inférieur à 7.143. 
+
+Les individus ayant un $\theta=0.8672$ seront quant à eux intéréssés par la formule à volonté si le coût marginal est inferieur à 7.5 et donc  si le prix du forfait est inférieur 8.333. 
+
+
+Les individus ayant un $\theta=0.8803$ seront intéréssés par la formule à volonté si le coût marginal est inferieur à 8.5 et donc  si le prix du forfait est inférieur à 8.696. 
+
+Les individus ayant un $\theta=0.897$ seront eux aussi intéréssés par la formule à volonté si le coût marginal est inferieur à 8.5 si le prix du forfait est inférieur à 8.696. 
+
+&nbsp; 
+
+$\textbf{Remarque}$ : Seuls les individus ayant un $\theta\ge0.9991$ seront intéréssés par la formule à volonté quelque soit le prix du forfait.
+
+```{r}
+#0.9991>1/(2-0.1*c)
+```
+
+&nbsp;
+
+### Surplus des consommateurs
+
+Comme nous l'avons vu dans la partie précedente, seuls les individus ayant un $\theta\ge0.6397$ sont intéressés par le forfait à volonté. On construit donc le tableau de surplus suivant en partant de cette valeur de $\theta=0.6397$. 
+
+Le surplus du consommateur de type $\theta$ est donné par : $SC_{\theta} = \theta-hA$
+
+
+$\textbf{Remarque}$ : Toutes les valeurs du Surplus qui sont négatives correspondent à des situations où les consommateurs ne sont  pas intéressés par la formule à volonté et donc ne consomment pas. 
+
+
+```{r,include=F}
+((0.1*c)+1)/2
+(1/(2-0.1*c))
+```
+
+
+```{r,include=F}
+theta[1]>(1/(2-0.1*c))
+theta[2]>(1/(2-0.1*c))
+theta[3]>(1/(2-0.1*c))
+theta[4]>(1/(2-0.1*c))
+theta[5]>(1/(2-0.1*c))
+theta[6]>(1/(2-0.1*c))
+theta[7]>(1/(2-0.1*c))
+theta[8]>(1/(2-0.1*c))
+theta[9]>(1/(2-0.1*c))
+theta[10]>(1/(2-0.1*c))
+
+```
+
+```{r}
+s1<-theta[1]-0.1*Aop
+s2<-theta[2]-0.1*Aop
+s3<-theta[3]-0.1*Aop
+s4<-theta[4]-0.1*Aop
+s5<-theta[5]-0.1*Aop
+s6<-theta[6]-0.1*Aop
+s7<-theta[7]-0.1*Aop
+s8<-theta[8]-0.1*Aop
+s9<-theta[9]-0.1*Aop
+s10<-theta[10]-0.1*Aop
+
+sur<-rbind(s5,s6,s7,s8,s9,s10)
+
+rownames(sur)<-round(theta[5:10],4)
+colnames(sur)<-c
+
+kable(round(sur,4),align = "c",caption = "Surplus des consommateurs")%>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F)%>%
+  add_header_above(c("theta"=1,"Niveau de coût marginal"=10))
+```
+
+\newpage 
+
+# Vente à l'unité ou à volonté ? 
+
+Pour déterminer laquelle de ces deux stratégies sera préférée à l'autre il suffit de comparer les profits pour chacun des niveaux de coût marginale.
+
+Dans le cas général la comparaison est déterminée par : $$2ln(hc-1)<ou>-hc-1-ln(h)$$
+
+Cette condition ne débouche pas sur une solution pertinente car içi on compare des continuums.
+
+```{r}
+profitcomp<-data.frame(cbind(c,profit,profit1))
+
+rownames(profitcomp)<-c("1","2","3","4","5","6","7","8","9","10")
+colnames(profitcomp)<-c("Coût marginal","Profit : à l'unité","Profit : à volonté")
+
+kable(profitcomp,align = "c",caption = "Unité ou Volonté") %>%
+kable_styling(latex_options=c("striped","hold_position"),full_width = F)
+```
+
+
+```{r,fig.height=4}
+
+g2<-ggplot(profitcomp, aes(y=c)) + 
+  geom_line(aes(x = profit), color = "darkred") + 
+  geom_line(aes(x = profit1), color="steelblue") +xlab("Profit")
+
+
+
+
+g2+ annotate(geom="text", y=10, x=0.75, label="Unité",
+              color="darkred") + annotate(geom="text", y=10, x=0.1, label="Volonté",
+              color="steelblue") +ylab("Coût marginal")
+```
+
+
+```{r,include=F}
+0.5*((0.1*c)-1)^2 >(1/(2*0.1))*exp(-0.1*c-1)
+2*log(0.1*c)>(-0.1*c-1-log(0.1))
+```
+
+En se basant sur les différents niveaux de profits, le monopole aura intérêt à adopter une stratégie de tarification forfaitaire si le coût marginal est faible : $Cm<3.415$, car son profit sera superieur à la tarification unitaire. 
+
+Pour un niveau de $Cm=3.415$ le "profit à l'unité" est égale au "profit forfaitaire" : $1.31$.
+
+Cependant si le $Cm>3.415$ c'est une stratégie de vente à l'unité qui devra être adoptée car le "profit à l'unité" est supérieur au "profit à volonté".
+
+
+
+
+&nbsp;
+
+
+&nbsp;
+
+&nbsp;
+
+\begin{center}
+\begin{Huge}
+$\textbf{PARTIE 2}$
+\end{Huge}
+\end{center}
+
+&nbsp;
+
+&nbsp;
+
+
+&nbsp;
+
+&nbsp;
+
+# Second Contexte 
+
+Résolution du problème pour :
+
+ 
+$$v(x)=x(1 + \psi + \theta) -(x+1)ln(x+1)$$ 
+et $$\theta \sim N^{+}(0,\sigma^{2})$$
+
+
+Les calculs ont été éffectué sur $\textbf{Pyton}$. 
+
+Le fichier *.ipnb* ainsi que le *.html* ont été joint en **Annexe**.
+
+# Vente à l'unité 
+
+## Consommateur 
+
+Comme dans la première partie, on fixe le Revenu noté $\textbf{R}$ à 1200 et l'utilité marginale de la monnaie notée $\textbf{h}$ à 0.1.
+
+&nbsp;
+
+On décide de générer dix valeurs aléatoires de $\theta$ correspondant à dix consommateurs telles que : 
+$$\theta \sim N^{+}(0,\sigma^{2})$$
+
+On obtient le continuum de consommateurs ordonné suivant : 
+
+```{r}
+set.seed(23)
+norm<-rnorm(10, 0.5, 0.25)
+
+thetan=sort(norm)
+thetaN<-rbind(round(thetan,5))
+
+colnames(thetaN)<-c("1","2","3","4","5","6","7","8","9","10")
+rownames(thetaN)<-"theta"
+kable(thetaN,align = "c",caption = "Continuum de consommateurs") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F) 
+```
+
+Le programme d'un consommateur de type $\theta$ est :
+$$  \cal{P}_{C-P}\left \{
+   \begin{array}{l l}
+      \underset{\{x,y\}}{Max:}  u(x,y) =x(\theta+\psi+1)-(x+1)ln(x+1)+hy \\
+      slc : px+y\le R \\
+   \end{array}
+   \right .$$
+   
+   
+$v(.)$ étant strictement concave, le programme admet une solution interieur. 
+
+La CN1 est $$\theta+\psi-hp-ln(x+1)=0$$ 
+
+Pour le consommateur de type $\theta$ la fonction de demande du bien composite  est donnée par : $$y(p,R,\theta)=R-p(exp(\theta+\psi-hp)-1)$$
+
+La demande individuelle pour le bien d'intérêt est : $$x_{\theta}(p,\theta) = exp(\theta+\psi-hp)-1$$
+
+La fonction d'utilité indirecte du consommateur de type $\theta$ est donc : $$V_{\theta} = Rh+exp(\theta+\psi-hp)-1$$
+
+
+
+&nbsp; 
+
+## Monopole
+
+&nbsp; 
+
+Pour un consommateur de type $\theta$, le programme du monopole est: 
+$$  \cal{P}_{M-P}| \theta\left \{
+   \begin{array}{l l}
+      \underset{\{x,p\}}{Max}:  \pi_{\theta}(p,x) =  (p-c)x \\
+      slc : x=exp(\theta+\psi-hp)-1 \\
+   \end{array}
+   \right .$$
+   
+Si on considère la vente du produit sur un continuum de consommateur, le programme du monopole monoproduit est
+
+$$  \cal{P}_{M-P}| \theta\left \{
+   \begin{array}{l }
+      \underset{\{x,p\}}{Max}:  \pi_{\theta}(p) =  \int_{{\underset{-}{\theta}}}^{\bar{\theta}}(p-c)exp(\theta+\psi-hp)-1dF(\theta) \\
+   \end{array}
+   \right .$$
+   
+on a : 
+$${\underset{-}{\theta}}(c-p)+ \bar{\theta}(c-p)-(-c-p)exp({\underset{-}{\theta}}+\psi-hp) +(-c+p)exp(\bar{\theta}+\psi-hp)$$
+En dérivant par rapport à p, on obtient: 
+
+$${\underset{-}{\theta}}-\bar{\theta}+h(-c+p)exp(\underset{-}{\theta}+\psi-hp)-h(-c+p)exp(\bar{\theta}+\psi-hp)-exp(\underset{-}{\theta}+\psi-hp)+exp(\bar{\theta}+\psi-hp)$$
+Ce qui nous donne le prix de vente à l'unité suivant : 
+\begin{Large}
+
+$$p=\frac{\frac{ch-LambertW(({\underset{-}{\theta}}-\bar{\theta})exp(-\psi+ch+1))}{exp({\underset{-}{\theta}})-exp(\bar{\theta})}+1}{h}$$
+\end{Large}
+
+Avec $LambertW$ : la réciproque de la fonction de variable complexe $f$ définie par $f(w)=w e^{w}$.
+
+\newpage
+
+Sous l'**Hypothèse 3**, c'est-à-dire : $[\underset{-}{\theta},\bar{\theta}]\in[0,1]$ le prix vaut : 
+$$p=\frac{\frac{ch-LambertW(exp(-\psi+ch+1))}{1-exp(1)}+1}{h}$$
+
+
+
+Ainsi, le Profit $\pi$ est donné par : 
+
+\begin{large}
+$$\pi=\frac{\frac{-exp(\theta+\psi-hp)LambertW(-exp(-\psi+ch+1))}{1-exp(1)}-1}{h}$$
+\end{large}
+
+$\textbf{Rappel :}$ Les différents niveaux de coût marginaux sont renseignés dans le tableau suivant : 
+
+```{r}
+kable(Cout,"latex",align = "c",caption = "Niveaux de coûts marginales ") %>%
+kable_styling(latex_options=c("striped","hold_position"),full_width = F)
+```
+
+on a : 
+
+```{r}
+  library(lamW)
+prix<-(c*0.1 - lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) + 1)/0.1
+
+```
+
+
+```{r}
+profit2<-(1 - exp(thetan + 0.3- 0.1*prix))*(lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) - 1)/0.1
+P=rbind(c,round(prix,3),round(profit2,3))
+colnames(P)<-c("1","2","3","4","5","6","7","8","9","10")
+rownames(P)<-c("Coût marginal","Prix de vente unitaire","Profit")
+
+kable(P,align = "c",caption = "Profit en fonction du coût margianale ") %>%
+  kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F)
+
+```
+
+```{r,fig.height=2.5}
+library(gridExtra)
+library(ggridges)
+graphpart<-data.frame(cbind(c,prix,profit2))
+ki<-ggplot(graphpart,aes(x=prix,y=c))+geom_point()+geom_line()+xlab("Prix de vente unitaire")+ylab("Coût marginal")+theme_gray()
+ki1<-ggplot(graphpart,aes(x=profit2,y=c))+geom_point()+geom_line()+xlab("Profit")+ylab("Coût marginal")+theme_gray()
+
+grid.arrange(ki,ki1,ncol=2)
+
+```
+
+Les principes économiques de base semblent être respectés. En effet, on constate que le prix de vente est croissant avec l'augmentation du coût marginale et que le profit augmente tendanciellement avec le coût marginal. On note simplement que le profit n'augmente pas de façon linéaire. 
+
+Le profit devient négatif si le $Cm\ge8.4$.
+
+\newpage
+
+$\textbf{Surplus des consommateurs}$
+
+Le surplus des consommateurs est donné par : 
+
+$$SC_{\theta}=\frac{-\theta+\psi}{h}+\frac{\frac{ch-LambertW(-exp(-\psi+ch+1))}{1-exp(1)}+1}{h}+\frac{\frac{exp(\theta+\psi-ch+LambertW(-exp(-\psi+ch+1))}{1-exp(1)}-1}{h}-\frac{1}{h}$$
+Pour notre continuum de consommateurs et en fonction du coût marginale, on a : 
+
+```{r}
+b1<- -(thetan[1] + 0.3)/0.1 + (c*0.1 - lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) + 1)/0.1 + exp(thetan[1] + 0.3 - c*0.1 + lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) - 1)/0.1 - 1/0.1
+b2<- -(thetan[2] + 0.3)/0.1 + (c*0.1 - lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) + 1)/0.1 + exp(thetan[2]+ 0.3 - c*0.1 + lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) - 1)/0.1 - 1/0.1
+b3<- -(thetan[3] + 0.3)/0.1 + (c*0.1 - lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) + 1)/0.1 + exp(thetan[3] + 0.3 - c*0.1 + lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) - 1)/0.1 - 1/0.1
+b4<- -(thetan[4] + 0.3)/0.1 + (c*0.1 - lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) + 1)/0.1 + exp(thetan[4] + 0.3 - c*0.1 + lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) - 1)/0.1 - 1/0.1
+b5<- -(thetan[5] + 0.3)/0.1 + (c*0.1 - lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) + 1)/0.1 + exp(thetan[5] + 0.3 - c*0.1 + lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) - 1)/0.1 - 1/0.1
+b6<- -(thetan[6] + 0.3)/0.1 + (c*0.1 - lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) + 1)/0.1 + exp(thetan[6] + 0.3 - c*0.1 + lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) - 1)/0.1 - 1/0.1
+b7<- -(thetan[7] + 0.3)/0.1 + (c*0.1 - lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) + 1)/0.1 + exp(thetan[7] + 0.3 - c*0.1 + lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) - 1)/0.1 - 1/0.1
+b8<- -(thetan[8] + 0.3)/0.1 + (c*0.1 - lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) + 1)/0.1 + exp(thetan[8] + 0.3 - c*0.1 + lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) - 1)/0.1 - 1/0.1
+b9<- -(thetan[9] + 0.3)/0.1 + (c*0.1 - lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) + 1)/0.1 + exp(thetan[9] + 0.3 - c*0.1 + lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) - 1)/0.1 - 1/0.1
+b10<- -(thetan[10] + 0.3)/0.1 + (c*0.1 - lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) + 1)/0.1 + exp(thetan[10] + 0.3 - c*0.1 + lambertW0(-exp(-0.3 + c*0.1 + 1)/(1 - exp(1))) - 1)/0.1 - 1/0.1
+
+suruni<-cbind(b1,b2,b3,b4,b5,b6,b7,b8,b9,b10)
+
+rownames(suruni)<-c
+colnames(suruni)<-c("1","2","3","4","5","6","7","8","9","10")
+
+kable(round(suruni,4),align = "c",caption = "Surplus des consommateurs")%>%
+  kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F)%>%
+  add_header_above(c("Coût marginal "=1,"Individus"=10))
+```
+
+
+
+
+
+# Tarification forfaitaire 
+
+Notons $A>0$ le forfait pour obtenir la consommation du bien d'intéret sans limitation 
+
+&nbsp;
+
+
+## Consommateur 
+
+Le consommateur de type $\theta$ paie A quelque soit la quantité consommée.
+
+Si $x>0$ le programme d'un consommateur de type $\theta$ est :
+
+$$  \cal{P}_{C-P}\left \{
+   \begin{array}{l l}
+      \underset{\{x,y\}}{Max:}  u(x,y) =x(\theta+\psi+1)-(x+1)ln(x+1)+hy \\
+      slc : A+y\le R \\
+   \end{array}
+   \right .$$
+
+
+
+La CN1 du programme est : $\theta +\psi-ln(x+1)=0$. La fonction de demande individuelle est donc 
+
+$$x_{\theta}(A)=exp(\theta+\psi)-1 $$ et la fonction d'utilité indirecte est : 
+
+$$V_{\theta}(A,R)=[exp(\theta+\psi)-1]_{0<A\le R}-Ah+hR$$
+
+$\textbf{Rappel}$ :
+```{r}
+kable(thetaN,align = "c",caption = "Continuum de consommateurs") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F) 
+```
+
+&nbsp;
+
+&nbsp;
+
+## Monopole 
+
+
+Si on considère la vente du produit sur un continuum de consommateur, le programme du monopole monoproduit est :
+
+$$  \cal{P}_{M-P}| \theta\left \{
+   \begin{array}{l }
+      \underset{\{x,p\}}{Max}:  \pi_{A}(p) =  \int_{Ah}^{\bar{\theta}}-Ah(A+c)+\bar{\theta}(A+c)-cexp(\psi+\theta)+cexp(Ah+\psi)\\
+   \end{array}
+   \right .$$
+
+La CN1 de ce programme est $-Ah+\theta+ch(exp(Ah+\psi))-h(A+c)$. 
+
+La fonction admet un maximum et est concave seulement si $A>\frac{ln(\frac{2exp(-\psi)}{ch})}{h}$.
+
+La valeur du forfait qui maximise le profit est :
+
+$$ A=\frac{\bar{\theta}-ch-2LambertW(\frac{-ch exp(\psi+\frac{\bar{\theta}}{2}-\frac{ch}{2})}{2})}{2h}$$
+
+Sous l'**Hypothèse 3**, cest à dire : $[\underset{-}{\theta},\bar{\theta}]\in[0,1]$ :
+
+$$ A=\frac{1-ch-2LambertW(\frac{-ch exp(\psi+\frac{1}{2}-\frac{ch}{2})}{2})}{2h}$$
+
+
+Ainsi, deux valeurs de A permettent de maximiser le profit : 
+
+$$ A_1=\frac{(-c*h - 2*LambertW(-0.824360635350064 c h (exp(\psi - c\frac{h}{2})) + 1}{2h} $$
+
+$$ A_2=\frac{(-c*h - 2*LambertW(0.824360635350064 c h (exp(\psi - c\frac{h}{2})) + 1}{2h} $$
+
+
+En fonction du continuum de coût on obtient : 
+
+```{r}
+h=0.1
+W=0.3
+A1<-(-c*h - 2*lambertW0(-0.824360635350064*c*h*exp(W - c*h/2)) + 1)/(2*h)
+A2<-(-c*h - 2*lambertW0(0.824360635350064*c*h*exp(W - c*h/2)) + 1)/(2*h)
+
+forf<-rbind(c,A1,round(A2,4))
+rownames(forf)<-c("Coût marginal","Forfait 1","Forfait 2")
+colnames(forf)<-c("1","2","3","4","5","6","7","8","9","10")
+
+kable(forf,align = "c",caption = "Montant des forfait") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F)
+
+```
+
+En ce qui concerne le premier continuum de Forfait, pour $Cm\ge5$ il est impossible de trouver des valeurs numériques aux prix du forfait. Certainement à cause des conditions du modèle et de la fonction d'utilité.
+
+En ce qui concerne le second continuum de Forfait, en respectant les différentes hypothèses et en attribuant des valeurs spécifiques à nos paramêtres on constate que dans ce modèle, seules des valeurs de $Cm<4$ permettent d'obtenir des prix d'obtenir des tarifs positifs. 
+
+\newpage
+
+$\textbf{Qui consomme ?}$
+
+Pour savoir qui consomme, il suffit de calculer les surplus des différents consommateurs. Ceux dont le surplus est positif consommeront le bien pour un niveau de coût donné..
+```{r}
+h=0.1
+W=0.3
+bornesup=1
+
+sup1<-c*h + (W - log(-c*h - 2.0*lambertW0(-0.824360635350064*c*h*exp(W - 0.5*c*h)) + 3.0) + 0.693147180559945)*(c*h + 2*lambertW0(-0.824360635350064*c*h*exp(W - c*h/2)) - 3)/2 + exp(W + 1) + lambertW0(-0.824360635350064*c*h*exp(W - c*h/2)) + lambertW0(-0.824360635350064*c*h*exp(W - 0.5*c*h)) - 3.0
+
+sup2<-c*h + (W - log(-c*h - 2.0*lambertW0(0.824360635350064*c*h*exp(W - 0.5*c*h)) + 3.0) + 0.693147180559945)*(c*h + 2*lambertW0(0.824360635350064*c*h*exp(W - c*h/2)) - 3)/2 + exp(W + 1) + lambertW0(0.824360635350064*c*h*exp(W - c*h/2)) + lambertW0(0.824360635350064*c*h*exp(W - 0.5*c*h)) - 3.0
+
+supp<-rbind(c,round(sup1,4),round(sup2,4))
+rownames(supp)<-c("Coût marginal","Surplus : A1","Surplus : A2")
+colnames(supp)<-c("1","2","3","4","5","6","7","8","9","10")
+
+kable(supp,align = "c",caption = "Surplus des consommateurs") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F)
+
+```
+&nbsp;
+
+&nbsp;
+
+$\textbf{Profit :}$
+
+Toujours sous l'**Hypothèse H3**, le profit est donné par :
+
+$$ \pi_{A1}=(\theta(ch - 2LambertW(-0.82436chexp(\psi - ch/2)) + 1)/2 + ch(-exp(\psi + \theta) $$
+$$+ exp(\psi - ch/2 - LambertW(\psi(-0.82436chexp(\psi - c*h/2)) + 1/2))$$ 
+$$ + (ch - 2LambertW(\psi(-0.82436*c*h*exp(\psi - c*h/2)) + 1)(c*h  $$
+$$ +2LambertW(\psi(-0.82436chexp(\psi - c*h/2)) - 1)/4)/h$$
+
+Et le second : 
+
+$$ \pi_{A2}=ch + (\psi - log(-ch - 2.0LambertW(0.82436chexp(\psi - 0.5ch)) + 3.0)$$ 
+$$ + 0.69314)(ch + 2LambertW(0.82436chexp(\psi - ch/2)) - 3)/2 + exp(\psi + 1)$$ 
+$$ + LambertW(0.82436chexp(\psi - ch/2)) $$ 
+$$ +LambertW(0.82436chexp(\psi - 0.5ch)) - 3.0 $$
+
+
+```{r}
+profitfA=(1*(c*h - 2*lambertW0(-0.824360635350064*c*h* exp(W - c*h/2)) + 1)/2 + c*h*(- exp(W + 1) +  exp(W - c*h/2 - lambertW0(-0.824360635350064*c*h* exp(W - c*h/2)) + 1/2)) + (c*h - 2*lambertW0(-0.824360635350064*c*h* exp(W - c*h/2)) + 1)*(c*h + 2*lambertW0(-0.824360635350064*c*h* exp(W - c*h/2)) - 1)/4)/h
+
+profitfA2=(1*(c*h - 2*lambertW0(0.824360635350064*c*h* exp(W - c*h/2)) + 1)/2 + c*h*(- exp(W + 1) +  exp(W - c*h/2 - lambertW0(0.824360635350064*c*h* exp(W - c*h/2)) + 1/2)) + (c*h - 2*lambertW0(0.824360635350064*c*h* exp(W - c*h/2)) + 1)*(c*h + 2*lambertW0(0.824360635350064*c*h* exp(W - c*h/2)) - 1)/4)/h
+
+```
+
+
+
+
+```{r}
+pro<-rbind(c,round(profitfA,4),round(profitfA2,4))
+rownames(pro)<-c("Coût marginal","Profit : A1","Profit : A2")
+colnames(pro)<-c("1","2","3","4","5","6","7","8","9","10")
+
+kable(pro,align = "c",caption = "Profit") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F)
+```
+
+Le producteur ne fera de profit positif que s'il fixe ses tarifs en fonction du continuum $A_1$. 
+
+S'il fixe des tarifs en fonction du continuum $A_2$, il fera des profits négatifs quelque soit les niveaux de coût de notre continuum. 
+
+
+
+
+\newpage 
+
+# Producteur Monopole : vente à l'unité et à volonté ?
+
+```{r}
+cocomp<-rbind(c,round(profit2,4),round(profitfA,4))
+rownames(cocomp)<-c("Coût marginal","Profit : à l'unité","Profit : Forfait")
+colnames(cocomp)<-c("1","2","3","4","5","6","7","8","9","10")
+
+kable(cocomp,align = "c",caption = "Profit") %>%
+kable_styling(latex_options=c("striped","hold_position","scale_down"),full_width = F)
+```
+
+
+Pour les niveaux de coût marginal tels que : $Cm\le4$, on constate que la tarification forfaitaire permet un profit beaucoup plus important que la tarification à l'unité. 
+
+Pour les niveaux de coût marginal tels que : $Cm\ge4$, la tarification forfaitaire n'est pas possible donc la question ne se pose pas. C'est une tarification unitaire qui sera appliquée.
+
+À un niveau de $Cm\ge 8.4$, le profit à l'unité devient négatif. On suppose donc que le monopole ne produira que si le seuil de fermeture est atteint.
+
+
